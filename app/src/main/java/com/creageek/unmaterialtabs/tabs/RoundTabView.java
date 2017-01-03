@@ -2,15 +2,18 @@ package com.creageek.unmaterialtabs.tabs;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+
+import com.creageek.unmaterialtabs.DimensUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,235 +22,274 @@ import java.util.List;
  * Created by Ruslan Kishai aka creageek on 12/31/2016.
  */
 
-public class RoundTabView extends HorizontalScrollView {
-    Rect textBounds;
-    RectF tab;
+public class RoundTabView extends HorizontalScrollView implements ViewPager.OnPageChangeListener {
     List<RoundTab> tabs = new ArrayList<>();
-    int clickedTab;
-    boolean isCentering = false;
+    int clickedPosition = 0;
+    LinearLayout ll;
+    ViewPager viewPager;
+
 
     public RoundTabView(Context context) {
         super(context);
-        initTab();
+        addViews(context);
+        setHorizontalScrollBarEnabled(false);
     }
+
 
     public RoundTabView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initTab();
+        addViews(context);
+        setHorizontalScrollBarEnabled(false);
+
     }
 
     public RoundTabView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initTab();
+        addViews(context);
+        setHorizontalScrollBarEnabled(false);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public RoundTabView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        initTab();
-    }
-
-    private void initTab() {
-        RoundTab tab = new RoundTab(getContext());
-        tab.setTabText("HEARTRATE");
-        tab.initTextBounds();
-        tabs.add(tab);
-
-
-        tab = new RoundTab(getContext());
-        tab.setTabText("OXYGEN");
-        tab.initTextBounds();
-        tabs.add(tab);
-
-
-        tab = new RoundTab(getContext());
-        tab.setTabText("EMOTIONAL");
-        tab.initTextBounds();
-        tabs.add(tab);
-
-
-        tab = new RoundTab(getContext());
-        tab.setTabText("BATTERY");
-        tab.initTextBounds();
-        tabs.add(tab);
-
+        addViews(context);
+        setHorizontalScrollBarEnabled(false);
 
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        for (int i = 0; i < tabs.size(); i++) {
-            RoundTab tab = tabs.get(i);
-            if (i == 0) {
-                //tab.setTabLeft(dpToPx(16));
-                tab.setTabRight(tab.getTabLeft() + tab.getTextBounds().width() + dpToPx(16) * 2);
-                tab.setTabTop(getHeight() / 2 - tab.getTextBounds().height() / 2 - dpToPx(12));
-                tab.setTabBottom(getHeight() / 2 + tab.getTextBounds().height() / 2 + dpToPx(12));
-            } else if (i < tabs.size() - 1) {
-                RoundTab prev = tabs.get(i - 1);
+    private void addViews(Context context) {
+        ll = new LinearLayout(context);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        lp.gravity = Gravity.CENTER;
+        ll.setLayoutParams(lp);
+        ll.setOrientation(LinearLayout.HORIZONTAL);
+/*
+        tabs.add(new RoundTab(context).initTab("RUSLAN IS AWESOME"));
+        tabs.get(0).setClicked(true);
 
-                tab.setTabLeft(prev.getTabRight() + dpToPx(16));
-                //tab.setTabLeft(0);
-                tab.setTabRight(tab.getTabLeft() + tab.getTextBounds().width() + dpToPx(16) * 2);
-                tab.setTabTop(getHeight() / 2 - tab.getTextBounds().height() / 2 - dpToPx(12));
-                //tab.setTabTop(0);
-                tab.setTabBottom(getHeight() / 2 + tab.getTextBounds().height() / 2 + dpToPx(12));
-            } else {
-                RoundTab prev = tabs.get(i - 1);
+        tabs.add(new RoundTab(context).initTab("HEARTRATE"));
+        tabs.add(new RoundTab(context).initTab("OXYGEN"));
+        tabs.add(new RoundTab(context).initTab("EMOTIONAL"));
+        tabs.add(new RoundTab(context).initTab("BATTERY"));
+        for (RoundTab tab : tabs)
+            ll.addView(tab, lp);*/
 
-                tab.setTabLeft(prev.getTabRight() + dpToPx(16));
-                //tab.setTabLeft(0);
-                if (!isCentering) {
-                    tab.setBeforeCentering(tab.getTabLeft() + tab.getTextBounds().width() + dpToPx(16) * 2);
-                    tab.setTabRight(tab.getTabLeft() + tab.getTextBounds().width() + dpToPx(16) * 2);
-                } else
-                    tab.setTabRight(tab.getTabLeft() + tab.getTextBounds().width() + dpToPx(16) * 2);
-                tab.setTabTop(getHeight() / 2 - tab.getTextBounds().height() / 2 - dpToPx(12));
-                //tab.setTabTop(0);
-                tab.setTabBottom(getHeight() / 2 + tab.getTextBounds().height() / 2 + dpToPx(12));
-            }
+        this.addView(ll, lp);
+    }
 
-            tab.setParentWidth(getWidth());
-            tab.setParentHeight(getHeight());
-            tab.onDraw(canvas);
+    public void setupWithViewPager(ViewPager viewPager) {
+        this.viewPager = viewPager;
+        viewPager.setOnPageChangeListener(this);
+        PagerAdapter adapter = viewPager.getAdapter();
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        lp.gravity = Gravity.CENTER;
+
+        for (int i = 0; i < adapter.getCount(); i++) {
+            String tabText = (String) adapter.getPageTitle(i);
+            RoundTab tab = new RoundTab(getContext()).initTab(tabText.toUpperCase());
+            if (i == 0)
+                tab.setClicked(true);
+            tabs.add(tab);
         }
 
-        setCentered(false);
-    }
-
-    private void drawTab(Canvas canvas, String tabText) {
-        Paint tabPaint = new Paint();
-        Paint paint = new Paint();
-        paint.setFakeBoldText(true);
-        tabPaint.setAntiAlias(true);
-
-        paint.setTextSize(spToPx(13));
-        textBounds = new Rect();
-        paint.getTextBounds(tabText, 0, tabText.length(), textBounds);
-
-        tab = new RectF();
-        tab.left = getWidth() / 2 - textBounds.width() / 2 - dpToPx(16);
-        tab.right = getWidth() / 2 + textBounds.width() / 2 + dpToPx(16);
-        tab.top = getHeight() / 2 - textBounds.height() / 2 - dpToPx(12);
-        tab.bottom = getHeight() / 2 + textBounds.height() / 2 + dpToPx(12);
-        //if (!clickedTab) {
-        tabPaint.setStyle(Paint.Style.STROKE);
-        tabPaint.setStrokeWidth(dpToPx(1.5f));
-        tabPaint.setColor(0xffffffff);
-        paint.setColor(0xffffffff);
-        //} else {
-        tabPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        tabPaint.setColor(0xffffffff);
-        paint.setColor(0xff37BBAD);
-        tab.left -= dpToPx(1.5f / 2.0f);
-        tab.right += dpToPx(1.5f / 2.0f);
-        tab.top -= dpToPx(1.5f / 2.0f);
-        tab.bottom += dpToPx(1.5f / 2.0f);
-        //}
-
-        canvas.drawRoundRect(tab, 50, 50, tabPaint);
-        canvas.drawText(tabText, getWidth() / 2 - textBounds.width() / 2, getHeight() / 2 + textBounds.height() / 2, paint);
-    }
-
-    public void setCentered(boolean isCentered) {
-        isCentering = isCentered;
-        RoundTab last = tabs.get(tabs.size() - 1);
-        if (isCentered && (last.beforeCentering + dpToPx(16)) < getWidth()) {
-            float freeSpace = getWidth() - last.beforeCentering - dpToPx(16) * 2;
-            tabs.get(0).setTabLeft(dpToPx(16) + freeSpace / 2);
-        } else tabs.get(0).setTabLeft(dpToPx(16));
-        invalidate();
-    }
-
-    private Rect drawTabText(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setColor(0xffffffff);
-        paint.setTextSize(spToPx(13));
-        Rect bounds = new Rect();
-        String tab = "HEARTRATE";
-        paint.getTextBounds(tab, 0, tab.length(), bounds);
-        canvas.drawText(tab, getWidth() / 2 - bounds.width() / 2, getHeight() / 2 + bounds.height() / 2, paint);
-        return bounds;
-    }
-
-    private void resetTabs(RoundTab tab) {
+        for (RoundTab tab : tabs)
+            ll.addView(tab, lp);
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                for (int i = 0; i < tabs.size(); i++) {
-                    RoundTab tab = tabs.get(i);
-                    if (isInBounds(event, tab.tab)) {
-                        if (clickedTab != i)
-                            tabs.get(clickedTab).clickedTab = false;
-                        clickedTab = i;
-                        tab.invertClicked();
-                        invalidate();
-                        return true;
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+        for (int i = 0; i < tabs.size(); i++) {
+            final RoundTab tab = tabs.get(i);
+            tab.setParentHeight(getHeight());
+            final int finalI = i;
+            tab.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (finalI != clickedPosition && clickedPosition != -1) {
+                        tabs.get(clickedPosition).setClicked(false);
+                        tabs.get(clickedPosition).invalidate();
+                        clickedPosition = finalI;
+                        tab.setClicked(true);
+                        tab.invalidate();
+                        viewPager.setCurrentItem(finalI);
                     }
                 }
+            });
+            if (i == 0) {
+                tab.setFirst(true);
+                tab.requestLayout();
+            } else if (i == tabs.size() - 1) {
+                tab.setLast(true);
+                tab.requestLayout();
+            }
+            tab.invalidate();
         }
-        return false;
     }
-
-    private boolean isInBounds(MotionEvent event, RectF tab) {
-        return tab.contains((int) event.getX(), (int) event.getY());
-    }
-
-   /* private boolean isInBounds(MotionEvent event, RoundTab tab) {
-        return event.getX() < tab.getTabRight() && event.getX() > tab.getTabLeft() && event.getY() < tab.getTabTop() && event.getY() > tab.getTabBottom();
-    }*/
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension(widthMeasureSpec, (int) dpToPx(48));
+        setMeasuredDimension(widthMeasureSpec, (DimensUtils.dpToPx(getContext(), 48)));
     }
 
-    private LinearLayout.LayoutParams createLayoutParamsForTabs() {
-        final LinearLayout.LayoutParams lp =
-                new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-        updateTabViewLayoutParams(lp);
-        return lp;
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
     }
 
-    private void updateTabViewLayoutParams(LinearLayout.LayoutParams lp) {
-      /*  if (mMode == MODE_FIXED && mTabGravity == GRAVITY_FILL) {
-            lp.width = 0;
-            lp.weight = 1;
-        } else {*/
-        lp.width = LinearLayout.LayoutParams.WRAP_CONTENT;
-        lp.weight = 0;
-        //}
+    @Override
+    public void onPageSelected(int position) {
+        scrollTabView(position);
+        //scrollRight(position);
+        if (position != clickedPosition && clickedPosition != -1) {
+            tabs.get(clickedPosition).setClicked(false);
+            tabs.get(clickedPosition).invalidate();
+            clickedPosition = position;
+            tabs.get(position).setClicked(true);
+            tabs.get(position).invalidate();
+        }
     }
 
-    int spToPx(float sps) {
-        return Math.round(getResources().getDisplayMetrics().scaledDensity * sps);
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 
-    int dpToPx(float dps) {
-        return Math.round(getResources().getDisplayMetrics().density * dps);
-    }
+    private void scrollTabView(int position) {
+        int previousPosition = 0;
+        int currentPosition = 0;
+        int nextPosition = 0;
 
-    private class TabStrip extends LinearLayout{
+        if (position == tabs.size() - 1)
+            smoothScrollTo(getRight(), 0);
 
-        public TabStrip(Context context) {
-            super(context);
+        if (position - 1 >= 0) {
+            for (int i = 0; i < position - 1; i++) {
+                previousPosition += tabs.get(i).getWidth();
+            }
         }
 
-        public TabStrip(Context context, AttributeSet attrs) {
-            super(context, attrs);
+        if (position + 1 < tabs.size()) {
+            for (int i = 0; i < position + 1; i++) {
+                nextPosition += tabs.get(i).getWidth();
+            }
         }
 
-        public TabStrip(Context context, AttributeSet attrs, int defStyleAttr) {
-            super(context, attrs, defStyleAttr);
+        for (int i = 0; i <= position; i++)
+            currentPosition += tabs.get(i).getWidth();
+
+        if (previousPosition < getScrollX())
+            smoothScrollTo(previousPosition, 0);
+        else if (currentPosition > getRight())
+            smoothScrollTo(previousPosition, 0);
+        else if (nextPosition > getRight())
+            smoothScrollTo(currentPosition, 0);
+    }
+
+    private void scrollRight(int position) {
+        int previousPosition = 0;
+        int currentPosition = 0;
+        int nextPosition = 0;
+
+        if (position == 0)
+            smoothScrollTo(0, 0);
+
+        if (position - 1 >= 0) {
+            for (int i = tabs.size() - 1; i >= position - 1; i--) {
+                previousPosition += tabs.get(i).getWidth();
+            }
         }
 
-        public TabStrip(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-            super(context, attrs, defStyleAttr, defStyleRes);
+        if (position + 1 < tabs.size()) {
+            for (int i = tabs.size() - 1; i >= position + 1; i--) {
+                nextPosition += tabs.get(i).getWidth();
+            }
+        }
+
+        for (int i = tabs.size() - 1; i >= position; i--)
+            currentPosition += tabs.get(i).getWidth();
+
+        if (getWidth() - currentPosition < getLeft()) {
+            smoothScrollTo(getWidth() - currentPosition, 0);
+        } else if (getWidth() - nextPosition < getLeft()) {
+            smoothScrollTo(getWidth() - nextPosition, 0);
+        }
+    }
+
+    private void scrollTabs(int position) {
+        int actualPosition = 0;
+        int actualPosition2 = 0;
+
+        if (position - 2 >= 0)
+            for (int i = 0; i <= position - 2; i++)
+                actualPosition2 += tabs.get(i).getWidth();
+        else
+            for (int i = 0; i <= position - 1; i++)
+                actualPosition2 += tabs.get(i).getWidth();
+
+        if (position + 1 < tabs.size())
+            for (int i = 0; i <= position + 1; i++)
+                actualPosition += tabs.get(i).getWidth();
+        else
+            for (int i = 0; i <= position; i++)
+                actualPosition += tabs.get(i).getWidth();
+        if (actualPosition > getWidth()) {
+            final int finalActualPosition = actualPosition;
+            this.post(new Runnable() {
+                @Override
+                public void run() {
+                    smoothScrollTo(finalActualPosition, 0);
+                }
+            });
+        } else if (actualPosition2 < getScrollX()) {
+            final int finalActualPosition = actualPosition2;
+            this.post(new Runnable() {
+                @Override
+                public void run() {
+                    smoothScrollTo(finalActualPosition, 0);
+                }
+            });
+        }
+    }
+
+    private void scrollTabsVariant(int position) {
+        int actualPosition = 0;
+        int actualPosition2 = 0;
+
+        if (position - 2 >= 0)
+            for (int i = 0; i <= position - 2; i++)
+                actualPosition2 += tabs.get(i).getWidth();
+        else
+            for (int i = 0; i <= position - 1; i++)
+                actualPosition2 += tabs.get(i).getWidth();
+
+        if (position + 1 < tabs.size())
+            for (int i = 0; i <= position + 1; i++)
+                actualPosition += tabs.get(i).getWidth();
+        else
+            for (int i = 0; i <= position; i++)
+                actualPosition += tabs.get(i).getWidth();
+        if (actualPosition > getWidth()) {
+            final int finalActualPosition = actualPosition - tabs.get(position).getWidth() - tabs.get(position - 1).getWidth();
+            this.post(new Runnable() {
+                @Override
+                public void run() {
+                    smoothScrollTo(finalActualPosition, 0);
+                }
+            });
+        } else if (actualPosition2 < getScrollX()) {
+            final int finalActualPosition = actualPosition2;
+            this.post(new Runnable() {
+                @Override
+                public void run() {
+                    smoothScrollTo(finalActualPosition, 0);
+                }
+            });
         }
     }
 }
+
