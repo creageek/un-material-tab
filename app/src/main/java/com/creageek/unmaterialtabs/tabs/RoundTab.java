@@ -18,7 +18,7 @@ public class RoundTab extends View {
 
     private String tabText;
 
-    private Paint tabPaint, textPaint;
+    private Paint tabPaint, tabStrokePaint, textPaint;
     private Rect textBounds;
     private RectF tab;
 
@@ -26,6 +26,8 @@ public class RoundTab extends View {
     private boolean isClicked = false;
     private boolean isFirst = false;
     private boolean isLast = false;
+
+    private int tabBackgroundColor = 0xff37BBAD;
 
     public RoundTab(Context context) {
         super(context);
@@ -37,6 +39,14 @@ public class RoundTab extends View {
         initView();
     }
 
+    public int getTabBackgroundColor() {
+        return tabBackgroundColor;
+    }
+
+    public void setTabBackgroundColor(int tabBackgroundColor) {
+        this.tabBackgroundColor = tabBackgroundColor;
+    }
+
     public RectF getTab() {
         return tab;
     }
@@ -45,6 +55,7 @@ public class RoundTab extends View {
         textBounds = new Rect();
         textPaint = new Paint();
         tabPaint = new Paint();
+        tabStrokePaint = new Paint();
     }
 
     public RoundTab initTab(String tabText) {
@@ -58,9 +69,14 @@ public class RoundTab extends View {
         textPaint.getTextBounds(tabText, 0, tabText.length(), textBounds);
 
         tabPaint.setAntiAlias(true);
-        tabPaint.setStyle(Paint.Style.STROKE);
+        tabPaint.setStyle(Paint.Style.FILL);
         tabPaint.setStrokeWidth(DimensUtils.dpToPx(getContext(), 1.5f));
         tabPaint.setColor(0xffffffff);
+
+        tabStrokePaint.setAntiAlias(true);
+        tabStrokePaint.setStyle(Paint.Style.STROKE);
+        tabStrokePaint.setStrokeWidth(DimensUtils.dpToPx(getContext(), 1.5f));
+        tabStrokePaint.setColor(0xffffffff);
 
         return this;
     }
@@ -80,20 +96,20 @@ public class RoundTab extends View {
                     parentHeight / 2 - textBounds.height() / 2 - DimensUtils.dpToPx(getContext(), 12),
                     textBounds.right + DimensUtils.dpToPx(getContext(), 6) + DimensUtils.dpToPx(getContext(), 16) * 2,
                     parentHeight / 2 + textBounds.height() / 2 + DimensUtils.dpToPx(getContext(), 12));
-
+           /* tab.left -= DimensUtils.dpToPx(getContext(), 1.5f / 2.0f);
+            tab.right += DimensUtils.dpToPx(getContext(), 1.5f / 2.0f);
+            tab.top -= DimensUtils.dpToPx(getContext(), 1.5f / 2.0f);
+            tab.bottom += DimensUtils.dpToPx(getContext(), 1.5f / 2.0f);
+           */
             if (isFirst) {
                 tab.left = DimensUtils.dpToPx(getContext(), 16);
                 tab.right = textBounds.right + DimensUtils.dpToPx(getContext(), 16) + DimensUtils.dpToPx(getContext(), 16) * 2;
                 textBounds.left = DimensUtils.dpToPx(getContext(), 16);
             }
-
-            tabPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-            tabPaint.setColor(0xffffffff);
+            tabPaint.setStyle(Paint.Style.FILL);
+            tabPaint.setColor(tabBackgroundColor);
             textPaint.setColor(0xff37BBAD);
-            tab.left -= DimensUtils.dpToPx(getContext(), 1.5f / 2.0f);
-            tab.right += DimensUtils.dpToPx(getContext(), 1.5f / 2.0f);
-            tab.top -= DimensUtils.dpToPx(getContext(), 1.5f / 2.0f);
-            tab.bottom += DimensUtils.dpToPx(getContext(), 1.5f / 2.0f);
+
         } else {
             tab = new RectF(
                     DimensUtils.dpToPx(getContext(), 6),
@@ -107,14 +123,19 @@ public class RoundTab extends View {
                 textBounds.left = DimensUtils.dpToPx(getContext(), 16);
             }
 
-            tabPaint.setStyle(Paint.Style.STROKE);
+            tabPaint.setStyle(Paint.Style.FILL);
             tabPaint.setStrokeWidth(DimensUtils.dpToPx(getContext(), 1.5f));
-            tabPaint.setColor(0xffffffff);
+            tabPaint.setColor(tabBackgroundColor);
             textPaint.setColor(0xffffffff);
         }
 
-
-        canvas.drawRoundRect(tab, 100, 100, tabPaint);
+        if (isClicked) {
+            canvas.drawRoundRect(tab, 100, 100, tabPaint);
+            canvas.drawRoundRect(tab, 100, 100, tabStrokePaint);
+        } else {
+            canvas.drawRoundRect(tab, 100, 100, tabPaint);
+            canvas.drawRoundRect(tab, 100, 100, tabStrokePaint);
+        }
         canvas.drawText(tabText, tab.left + DimensUtils.dpToPx(getContext(), 16), parentHeight / 2 + textBounds.height() / 2, textPaint);
     }
 

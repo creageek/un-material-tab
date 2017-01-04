@@ -1,5 +1,7 @@
 package com.creageek.unmaterialtabs.tabs;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Build;
@@ -14,6 +16,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
 import com.creageek.unmaterialtabs.DimensUtils;
+import com.creageek.unmaterialtabs.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,8 +92,10 @@ public class RoundTabView extends HorizontalScrollView implements ViewPager.OnPa
         for (int i = 0; i < adapter.getCount(); i++) {
             String tabText = (String) adapter.getPageTitle(i);
             RoundTab tab = new RoundTab(getContext()).initTab(tabText.toUpperCase());
-            if (i == 0)
+            if (i == 0) {
                 tab.setClicked(true);
+                tab.setTabBackgroundColor(0xffffffff);
+            }
             tabs.add(tab);
         }
 
@@ -110,9 +115,11 @@ public class RoundTabView extends HorizontalScrollView implements ViewPager.OnPa
                 public void onClick(View view) {
                     if (finalI != clickedPosition && clickedPosition != -1) {
                         tabs.get(clickedPosition).setClicked(false);
+                        animateFadeOut(tabs.get(clickedPosition));
                         tabs.get(clickedPosition).invalidate();
                         clickedPosition = finalI;
                         tab.setClicked(true);
+                        animateFadeIn(tab);
                         tab.invalidate();
                         viewPager.setCurrentItem(finalI);
                     }
@@ -147,9 +154,11 @@ public class RoundTabView extends HorizontalScrollView implements ViewPager.OnPa
         //scrollRight(position);
         if (position != clickedPosition && clickedPosition != -1) {
             tabs.get(clickedPosition).setClicked(false);
+            animateFadeOut(tabs.get(clickedPosition));
             tabs.get(clickedPosition).invalidate();
             clickedPosition = position;
             tabs.get(position).setClicked(true);
+            animateFadeIn(tabs.get(position));
             tabs.get(position).invalidate();
         }
     }
@@ -157,6 +166,36 @@ public class RoundTabView extends HorizontalScrollView implements ViewPager.OnPa
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    private void animateFadeIn(final RoundTab tab) {
+        int fromColor = getContext().getResources().getColor(R.color.colorPrimary);
+        int toColor = getContext().getResources().getColor(R.color.colorWhite);
+
+        ValueAnimator colorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), fromColor, toColor);
+        colorAnimator.setDuration(250);
+        colorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                tab.setTabBackgroundColor((Integer) valueAnimator.getAnimatedValue());
+            }
+        });
+        colorAnimator.start();
+    }
+
+    private void animateFadeOut(final RoundTab tab) {
+        int fromColor = getContext().getResources().getColor(R.color.colorWhite);
+        int toColor = getContext().getResources().getColor(R.color.colorPrimary);
+
+        ValueAnimator colorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), fromColor, toColor);
+        colorAnimator.setDuration(250);
+        colorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                tab.setTabBackgroundColor((Integer) valueAnimator.getAnimatedValue());
+            }
+        });
+        colorAnimator.start();
     }
 
     private void scrollTabView(int position) {
