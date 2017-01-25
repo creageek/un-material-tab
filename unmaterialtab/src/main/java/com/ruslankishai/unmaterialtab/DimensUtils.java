@@ -1,4 +1,4 @@
-package com.creageek.unmaterialtabs;
+package com.ruslankishai.unmaterialtab;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
