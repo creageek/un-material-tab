@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-               /* case 0:return "Ruslan is awesome";
-                case 1:return "Force LLC";*/
                 case 0:
                     return "heartrate";
                 case 1:
@@ -53,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 8;
+            return 4;
         }
     }
 
