@@ -7,7 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.ruslankishai.unmaterialtab.tabs.RoundTabView;
+import com.ruslankishai.unmaterialtab.tabs.RoundTabLayout;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,9 +19,8 @@ public class MainActivity extends AppCompatActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         FragmentPagerAdapter adapter = new ViewAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
-        RoundTabView tabView = (RoundTabView) findViewById(R.id.round_tab_view);
+        RoundTabLayout tabView = (RoundTabLayout) findViewById(R.id.round_tab_view);
         tabView.setupWithViewPager(viewPager);
-
     }
 
     private class ViewAdapter extends FragmentPagerAdapter {
