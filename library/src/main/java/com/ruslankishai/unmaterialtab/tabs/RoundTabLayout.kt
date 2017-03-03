@@ -17,7 +17,6 @@ import com.ruslankishai.unmaterialtab.DimensUtils
 import com.ruslankishai.unmaterialtab.R
 import java.util.*
 
-
 /**
  * Custom tab layout which can be used as a material
  * TabLayout alternative and consists basic functionality
@@ -25,7 +24,7 @@ import java.util.*
  *
  * Created by Ruslan Kishai on 12/31/2016.
  */
-internal class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeListener {
+class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeListener {
 
     //<editor-fold desc="Layout variables">
     private var tabs: MutableList<RoundTab> = ArrayList()
@@ -39,6 +38,8 @@ internal class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeList
 
     private var cornerRadius: Int = 50
     private var clickedPosition = 0
+
+    private var hasStroke = true
     //</editor-fold>
 
     //<editor-fold desc="Layout constructors">
@@ -47,6 +48,7 @@ internal class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeList
      * Hides parent view scrollbar and adds tabs to the strip.
      * @param context passing as parameter int HorizontalScrollView class constructor.
      */
+    //FIXME throws NPE with kotlin-style default constructor
     constructor(context: Context) : super(context) {
         isHorizontalScrollBarEnabled = false
         addViews(context)
@@ -63,6 +65,7 @@ internal class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeList
         val typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.RoundTabLayout)
         tabStrokeColor = typedArray.getColor(R.styleable.RoundTabLayout_accent, 0xff464646.toInt())
         cornerRadius = typedArray.getInt(R.styleable.RoundTabLayout_cornerRadius, 50)
+        hasStroke = typedArray.getBoolean(R.styleable.RoundTabLayout_withStroke, true)
         iconRes = typedArray.getDrawable(R.styleable.RoundTabLayout_src)
         typedArray.recycle()
 
@@ -106,7 +109,8 @@ internal class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeList
 
         for (i in 0..viewPager.adapter.count - 1) {
             val tabText = viewPager.adapter.getPageTitle(i) as String
-            val tab = RoundTab(context, cornerRadius, iconRes).initTab(tabText.toUpperCase())
+            val tab = RoundTab(context, cornerRadius, iconRes, hasStroke)
+                    .initTab(tabText.toUpperCase())
 
             if (i == viewPager.currentItem) {
                 tab.setTabBackgroundColor(tabStrokeColor)
@@ -122,6 +126,15 @@ internal class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeList
 
         for (tab in tabs)
             tabStrip?.addView(tab, layoutParams)
+    }
+
+    /**
+     * Adds tab to child LinearLayout and forming tabs strip.
+     * @param tab user tab with custom text and colors.
+     */
+    private fun addTab(tab: RoundTab) {
+        tabs.add(tab)
+        tabStrip?.addView(tab, layoutParams)
     }
     //</editor-fold>
 
@@ -212,14 +225,14 @@ internal class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeList
         colorAnimator.start()
 
         val textAnimator = ValueAnimator.ofObject(ArgbEvaluator(), contentColorFrom, contentColorTo)
-        textAnimator.duration = 250
+        textAnimator.duration = 200
         textAnimator.addUpdateListener { valueAnimator ->
             tab.setTabTextColor(valueAnimator.animatedValue as Int)
         }
         textAnimator.start()
 
         val iconAnimator = ValueAnimator.ofObject(ArgbEvaluator(), contentColorFrom, contentColorTo)
-        iconAnimator.duration = 250
+        iconAnimator.duration = 350
         iconAnimator.addUpdateListener { valueAnimator ->
             tab.setTabIconTint(valueAnimator.animatedValue as Int)
         }

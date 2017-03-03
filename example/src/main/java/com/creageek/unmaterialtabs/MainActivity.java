@@ -21,6 +21,15 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         RoundTabLayout tabView = (RoundTabLayout) findViewById(R.id.round_tab_view);
         tabView.setupWithViewPager(viewPager);
+        viewPager = (ViewPager) findViewById(R.id.view_pager2);
+        viewPager.setAdapter(adapter);
+        ((RoundTabLayout) findViewById(R.id.round_tab_view2)).setupWithViewPager(viewPager);
+        viewPager = (ViewPager) findViewById(R.id.view_pager3);
+        viewPager.setAdapter(adapter);
+        ((RoundTabLayout) findViewById(R.id.round_tab_view3)).setupWithViewPager(viewPager);
+        viewPager = (ViewPager) findViewById(R.id.view_pager4);
+        viewPager.setAdapter(adapter);
+        ((RoundTabLayout) findViewById(R.id.round_tab_view4)).setupWithViewPager(viewPager);
     }
 
     private class ViewAdapter extends FragmentPagerAdapter {
@@ -33,13 +42,17 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "heartrate";
+                    return "All";
                 case 1:
-                    return "oxygen";
+                    return "Articles";
                 case 2:
-                    return "emotional";
+                    return "Interviews";
                 case 3:
-                    return "battery";
+                    return "News";
+                case 4:
+                    return "Events";
+                case 5:
+                    return "Links";
             }
             return "large tab text" + position;
         }
@@ -51,9 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 4;
+            return 6;
         }
     }
-
-
 }

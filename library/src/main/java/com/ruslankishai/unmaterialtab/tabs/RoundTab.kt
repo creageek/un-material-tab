@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import com.ruslankishai.unmaterialtab.DimensUtils
 
+
 /**
  * Custom tab view that extends from simple View.
  * Exists as a part of RoundTabLayout and contains only basic
@@ -13,7 +14,7 @@ import com.ruslankishai.unmaterialtab.DimensUtils
  *
  * Created by Ruslan Kishai on 1/1/2017.
  */
-class RoundTab : View {
+internal class RoundTab(context: Context) : View(context) {
 
     //<editor-fold desc="View variables">
     private var tab: RectF? = null
@@ -38,24 +39,17 @@ class RoundTab : View {
     private var isLast = false
         private set
     private var hasIcon = false
+    private var hasStroke: Boolean = true
 
     private var parentHeight: Int = 0
         private set
     private var cornerRadius: Int = 50
 
     private var icon: Drawable? = null
-    private var tabText: String? = null
+    private var tabText: String? = ""
     //</editor-fold>
 
     //<editor-fold desc="View constructors">
-    /**
-     * Class constructor.
-     * Initializing view.
-     * @param context passing as parameter int View class constructor.
-     */
-    constructor(context: Context) : super(context) {
-        initView()
-    }
 
     /**
      * Class constructor. Initializing view and takes few parameters.
@@ -64,15 +58,20 @@ class RoundTab : View {
      * @param iconRes drawable resource that is using as an alternative
      * for a selected tab indicator.
      */
-    constructor(context: Context, cornerRadius: Int, iconRes: Drawable?) : super(context) {
-        initView()
+    constructor(context: Context, cornerRadius: Int, iconRes: Drawable?, isStrokeEnabled: Boolean)
+            : this(context) {
 
         this.cornerRadius = cornerRadius
+        this.hasStroke = isStrokeEnabled
 
         if (iconRes != null) {
             this.icon = iconRes
             hasIcon = true
         } else hasIcon = false
+    }
+
+    init {
+        initView()
     }
     //</editor-fold>
 
@@ -82,10 +81,11 @@ class RoundTab : View {
      */
     private fun initView() {
         tab = RectF()
-        tabPaint = Paint()
         tabStrokePaint = Paint()
         textBounds = Rect()
         textPaint = Paint()
+        tabPaint = Paint()
+
     }
 
     /**
@@ -102,15 +102,16 @@ class RoundTab : View {
         textPaint!!.isFakeBoldText = true
         textPaint!!.getTextBounds(tabText, 0, tabText.length, textBounds)
 
-        tabPaint!!.style = Paint.Style.FILL
-        tabPaint!!.color = tabBackgroundColor
-        tabPaint!!.strokeWidth = DimensUtils.dpToPx(context, 1.5f)
-        tabPaint!!.isAntiAlias = true
 
         tabStrokePaint!!.style = Paint.Style.STROKE
         tabStrokePaint!!.color = tabStrokeColor
         tabStrokePaint!!.strokeWidth = DimensUtils.dpToPx(context, 1.5f)
         tabStrokePaint!!.isAntiAlias = true
+
+        tabPaint!!.style = Paint.Style.FILL
+        tabPaint!!.color = tabBackgroundColor
+        tabPaint!!.strokeWidth = DimensUtils.dpToPx(context, 1.5f)
+        tabPaint!!.isAntiAlias = true
 
         icon?.setColorFilter(tabTextColor, PorterDuff.Mode.SRC_ATOP)
 
@@ -127,7 +128,9 @@ class RoundTab : View {
         textPaint!!.color = tabTextColor
 
         canvas.drawRoundRect(tab!!, cornerRadius.toFloat(), cornerRadius.toFloat(), tabPaint!!)
-        canvas.drawRoundRect(tab!!, cornerRadius.toFloat(), cornerRadius.toFloat(), tabStrokePaint!!)
+
+        if (hasStroke)
+            canvas.drawRoundRect(tab!!, cornerRadius.toFloat(), cornerRadius.toFloat(), tabStrokePaint!!)
 
         if (hasIcon)
             canvas.drawText(tabText!!,

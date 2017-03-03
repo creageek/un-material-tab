@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.creageek.unmaterialtabs.MainActivity">
+
+    <com.ruslankishai.unmaterialtab.tabs.RoundTabLayout
+        android:id="@+id/round_tab_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        app:accent="@color/color1"
+        app:withStroke="true" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:background="@color/color1"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
+    <com.ruslankishai.unmaterialtab.tabs.RoundTabLayout
+        android:id="@+id/round_tab_view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        app:accent="@color/color4"
+        app:withStroke="true"
+        app:cornerRadius="35"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager2"
+        android:background="@color/color4"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+    <com.ruslankishai.unmaterialtab.tabs.RoundTabLayout
+        android:id="@+id/round_tab_view3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        app:accent="@color/color2"
+        app:cornerRadius="rounded"
+        app:withStroke="true" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager3"
+        android:background="@color/color2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
+    <com.ruslankishai.unmaterialtab.tabs.RoundTabLayout
+        android:id="@+id/round_tab_view4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        app:accent="@color/color3"
+        app:cornerRadius="0"
+        app:withStroke="true" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager4"
+        android:background="@color/color3"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+</LinearLayout>

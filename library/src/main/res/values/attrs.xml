@@ -8,5 +8,6 @@
             <flag name="circle" value="50"/>
         </attr>
         <attr name="src" format="reference"/>
+        <attr name="withStroke" format="boolean"/>
     </declare-styleable>
 </resources>
