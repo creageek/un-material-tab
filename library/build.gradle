@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-
+apply from: '../maven_push.gradle'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
