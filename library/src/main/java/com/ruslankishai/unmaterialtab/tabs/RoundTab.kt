@@ -14,7 +14,7 @@ import com.ruslankishai.unmaterialtab.DimensUtils
  *
  * Created by Ruslan Kishai on 1/1/2017.
  */
-internal class RoundTab(context: Context) : View(context) {
+class RoundTab(context: Context) : View(context) {
 
     //<editor-fold desc="View variables">
     private val INNER_VERTICAL_PADDING = DimensUtils.dpToPx(context, 12f)
@@ -28,16 +28,11 @@ internal class RoundTab(context: Context) : View(context) {
     private val ICON_HORIZONTAL_EDGE_PADDING = DimensUtils.dpToPx(context, 16)
 
     private var tab: RectF? = null
-        private set
     private var tabPaint: Paint? = null
-        private set
     private var tabStrokePaint: Paint? = null
-        private set
 
     private var textBounds: Rect? = null
-        private set
     private var textPaint: Paint? = null
-        private set
 
     private var tabBackgroundColor: Int = 0
     private var tabStrokeColor: Int = 0
@@ -45,18 +40,17 @@ internal class RoundTab(context: Context) : View(context) {
     private var tabIconColor: Int = 0xffffff
 
     private var isFirst = false
-        private set
     private var isLast = false
-        private set
-    private var hasIcon = false
-    private var hasStroke: Boolean = true
 
     private var parentHeight: Int = 0
-        private set
-    private var cornerRadius: Int = 50
 
-    private var icon: Drawable? = null
-    private var tabText: String? = ""
+    var hasIcon = false
+    var hasStroke: Boolean = true
+
+    var icon: Drawable? = null
+
+    var tabText: String? = ""
+    var cornerRadius: Int = 50
     //</editor-fold>
 
     //<editor-fold desc="View constructors">
@@ -110,6 +104,7 @@ internal class RoundTab(context: Context) : View(context) {
         textPaint!!.isAntiAlias = true
         textPaint!!.isFakeBoldText = true
         textPaint!!.getTextBounds(tabText, 0, tabText.length, textBounds)
+
 
         tabStrokePaint!!.style = Paint.Style.STROKE
         tabStrokePaint!!.color = tabStrokeColor
