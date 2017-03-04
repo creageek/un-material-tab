@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RoundTabLayout">
+        <attr name="accent" format="color"/>
+        <attr name="cornerRadius" format="integer|string">
+            <flag name="rectangle" value="0"/>
+            <flag name="rounded" value="15"/>
+            <flag name="circle" value="50"/>
+        </attr>
+        <attr name="src" format="reference"/>
+        <attr name="withStroke" format="boolean"/>
+    </declare-styleable>
+</resources>
