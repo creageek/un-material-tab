@@ -278,6 +278,8 @@ class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeListener {
     }
     //</editor-fold>
 
+    fun getTab(position: Int) = tabs[position]
+
     companion object {
         val ANIMATION_FADE_IN = 1
         val ANIMATION_FADE_OUT = 0

@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.TypedValue
 
 /**
- * Dimensions and measurements methods and values.
+ * Dimension and measurement methods and values.
  *
  * Created by Ruslan Kishai on 1/2/2017.
  */
