@@ -17,6 +17,16 @@ import com.ruslankishai.unmaterialtab.DimensUtils
 internal class RoundTab(context: Context) : View(context) {
 
     //<editor-fold desc="View variables">
+    private val INNER_VERTICAL_PADDING = DimensUtils.dpToPx(context, 12f)
+    private val INNER_HORIZONTAL_PADDING = DimensUtils.dpToPx(context, 16f) * 2
+
+    private val OUTER_HORIZONTAL_EDGE_PADDING = DimensUtils.dpToPx(context, 16f)
+    private val OUTER_HORIZONTAL_PADDING = DimensUtils.dpToPx(context, 6f)
+
+    private val ICON_SIZE = DimensUtils.dpToPx(context, 24)
+    private val ICON_HORIZONTAL_PADDING = DimensUtils.dpToPx(context, 8)
+    private val ICON_HORIZONTAL_EDGE_PADDING = DimensUtils.dpToPx(context, 16)
+
     private var tab: RectF? = null
         private set
     private var tabPaint: Paint? = null
@@ -85,7 +95,6 @@ internal class RoundTab(context: Context) : View(context) {
         textBounds = Rect()
         textPaint = Paint()
         tabPaint = Paint()
-
     }
 
     /**
@@ -101,7 +110,6 @@ internal class RoundTab(context: Context) : View(context) {
         textPaint!!.isAntiAlias = true
         textPaint!!.isFakeBoldText = true
         textPaint!!.getTextBounds(tabText, 0, tabText.length, textBounds)
-
 
         tabStrokePaint!!.style = Paint.Style.STROKE
         tabStrokePaint!!.color = tabStrokeColor
@@ -134,19 +142,22 @@ internal class RoundTab(context: Context) : View(context) {
 
         if (hasIcon)
             canvas.drawText(tabText!!,
-                    DimensUtils.dpToPx(context, 30) + tab!!.left + DimensUtils.dpToPx(context, 16),
+                    tab!!.left +
+                            ICON_SIZE +
+                            ICON_HORIZONTAL_EDGE_PADDING +
+                            ICON_HORIZONTAL_PADDING,
                     (parentHeight / 2 + textBounds!!.height() / 2).toFloat(),
                     textPaint!!)
         else
             canvas.drawText(tabText!!,
-                    tab!!.left + DimensUtils.dpToPx(context, 16),
+                    tab!!.left + INNER_HORIZONTAL_PADDING / 2,
                     (parentHeight / 2 + textBounds!!.height() / 2).toFloat(),
                     textPaint!!)
 
-        icon?.setBounds((tab!!.left + DimensUtils.dpToPx(context, 16)).toInt(),
-                (parentHeight / 2 - DimensUtils.dpToPx(context, 12)),
-                (tab!!.left + DimensUtils.dpToPx(context, 40)).toInt(),
-                (parentHeight / 2 + DimensUtils.dpToPx(context, 12)))
+        icon?.setBounds((tab!!.left + ICON_HORIZONTAL_PADDING * 2).toInt(),
+                (parentHeight / 2 - INNER_VERTICAL_PADDING).toInt(),
+                (tab!!.left + ICON_HORIZONTAL_PADDING * 2 + ICON_SIZE).toInt(),
+                (parentHeight / 2 + INNER_VERTICAL_PADDING).toInt())
 
         if (hasIcon) {
             icon?.setColorFilter(tabTextColor, PorterDuff.Mode.SRC_ATOP)
@@ -166,44 +177,47 @@ internal class RoundTab(context: Context) : View(context) {
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         if (hasIcon) {
-            tab!!.left = DimensUtils.dpToPx(context, 6).toFloat()
-            tab!!.top = (parentHeight / 2 -
-                    DimensUtils.dpToPx(context, 6) -
-                    DimensUtils.dpToPx(context, 12)).toFloat()
-            tab!!.right = (textBounds!!.right +
-                    DimensUtils.dpToPx(context, 27) +
-                    DimensUtils.dpToPx(context, 12) +
-                    DimensUtils.dpToPx(context, 16) * 2).toFloat()
-            tab!!.bottom = (parentHeight / 2 +
-                    DimensUtils.dpToPx(context, 6) +
-                    DimensUtils.dpToPx(context, 12)).toFloat()
+            tab!!.left = OUTER_HORIZONTAL_PADDING
+            tab!!.top = parentHeight / 2 -
+                    textBounds!!.height() / 2 -
+                    INNER_VERTICAL_PADDING
+            tab!!.right = textBounds!!.right +
+                    INNER_HORIZONTAL_PADDING +
+                    ICON_SIZE +
+                    ICON_HORIZONTAL_PADDING * 2
+            tab!!.bottom = parentHeight / 2 +
+                    textBounds!!.height() / 2 +
+                    INNER_VERTICAL_PADDING
 
             if (isFirst) {
-                tab!!.left = DimensUtils.dpToPx(context, 16).toFloat()
-                tab!!.right = (textBounds!!.right +
-                        DimensUtils.dpToPx(context, 32) +
-                        DimensUtils.dpToPx(context, 16) +
-                        DimensUtils.dpToPx(context, 16) * 2).toFloat()
-                textBounds!!.left = DimensUtils.dpToPx(context, 16)
+                tab!!.left = OUTER_HORIZONTAL_EDGE_PADDING
+                tab!!.right = textBounds!!.right +
+                        INNER_HORIZONTAL_PADDING +
+                        ICON_SIZE +
+                        //Looks like I cant figure out where I missed this 4px.
+                        //If you'll find it - feel free to send a pull request :)
+                        4 +
+                        ICON_HORIZONTAL_EDGE_PADDING +
+                        ICON_HORIZONTAL_PADDING
             }
         } else {
-            tab!!.left = DimensUtils.dpToPx(context, 6).toFloat()
+            tab!!.left = OUTER_HORIZONTAL_PADDING
+            tab!!.right = textBounds!!.right +
+                    OUTER_HORIZONTAL_PADDING +
+                    INNER_HORIZONTAL_PADDING
+
             tab!!.top = (parentHeight / 2 -
-                    textBounds!!.height() / 2 -
-                    DimensUtils.dpToPx(context, 12)).toFloat()
-            tab!!.right = (textBounds!!.right +
-                    DimensUtils.dpToPx(context, 6) +
-                    DimensUtils.dpToPx(context, 16) * 2).toFloat()
+                    textBounds!!.height() / 2).toFloat() - INNER_VERTICAL_PADDING
             tab!!.bottom = (parentHeight / 2 +
-                    textBounds!!.height() / 2 +
-                    DimensUtils.dpToPx(context, 12)).toFloat()
+                    textBounds!!.height() / 2).toFloat() +
+                    INNER_VERTICAL_PADDING
 
             if (isFirst) {
-                tab!!.left = DimensUtils.dpToPx(context, 16).toFloat()
-                tab!!.right = (textBounds!!.right +
-                        DimensUtils.dpToPx(context, 16) +
-                        DimensUtils.dpToPx(context, 16) * 2).toFloat()
-                textBounds!!.left = DimensUtils.dpToPx(context, 16)
+                tab!!.left = OUTER_HORIZONTAL_EDGE_PADDING
+                tab!!.right = textBounds!!.right +
+                        OUTER_HORIZONTAL_EDGE_PADDING +
+                        INNER_HORIZONTAL_PADDING
+                textBounds!!.left = OUTER_HORIZONTAL_EDGE_PADDING.toInt()
             }
         }
     }
@@ -218,57 +232,43 @@ internal class RoundTab(context: Context) : View(context) {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         if (hasIcon && isFirst) {
-            //Text size
-            setMeasuredDimension(textBounds!!.right +
-                    //Unknown value
-                    DimensUtils.dpToPx(context, 16) * 3 +
-                    //For tab left margin
-                    DimensUtils.dpToPx(context, 8) +
-                    //For an icon with a little bit of margin
-                    DimensUtils.dpToPx(context, 30),
+            setMeasuredDimension((textBounds!!.right +
+                    INNER_HORIZONTAL_PADDING +
+                    OUTER_HORIZONTAL_EDGE_PADDING +
+                    ICON_SIZE +
+                    ICON_HORIZONTAL_EDGE_PADDING).toInt(),
                     heightMeasureSpec)
         } else if (hasIcon && isLast) {
-            //Text size
-            setMeasuredDimension(textBounds!!.right +
-                    //Unknown value
-                    DimensUtils.dpToPx(context, 16) * 3 +
-                    //Right margin and another magic
-                    DimensUtils.dpToPx(context, 12) +
-                    //For an icon with a little bit of margin
-                    DimensUtils.dpToPx(context, 30),
+            setMeasuredDimension((textBounds!!.right +
+                    INNER_HORIZONTAL_PADDING +
+                    OUTER_HORIZONTAL_EDGE_PADDING +
+                    OUTER_HORIZONTAL_PADDING +
+                    ICON_HORIZONTAL_EDGE_PADDING +
+                    ICON_SIZE).toInt(),
                     heightMeasureSpec)
         } else if (hasIcon) {
-            //Text size
-            setMeasuredDimension(textBounds!!.right +
-                    //Unknown values
-                    DimensUtils.dpToPx(context, 16) * 2 +
-                    DimensUtils.dpToPx(context, 16) +
-                    //For an icon with a little bit of margin
-                    DimensUtils.dpToPx(context, 30),
+            setMeasuredDimension((textBounds!!.right +
+                    INNER_HORIZONTAL_PADDING +
+                    OUTER_HORIZONTAL_PADDING +
+                    ICON_SIZE +
+                    ICON_HORIZONTAL_PADDING * 2).toInt(),
                     heightMeasureSpec)
         } else if (isFirst) {
-            //Text size
-            setMeasuredDimension(textBounds!!.right +
-                    //Unknown value
-                    DimensUtils.dpToPx(context, 16) * 3 +
-                    //For tab left margin
-                    DimensUtils.dpToPx(context, 6),
+            setMeasuredDimension((textBounds!!.right +
+                    OUTER_HORIZONTAL_EDGE_PADDING +
+                    INNER_HORIZONTAL_PADDING +
+                    OUTER_HORIZONTAL_PADDING).toInt(),
                     heightMeasureSpec)
         } else if (isLast) {
-            //Text size
-            setMeasuredDimension(textBounds!!.right +
-                    //Unknown value
-                    DimensUtils.dpToPx(context, 16) * 3 +
-                    //For tab right margin
-                    DimensUtils.dpToPx(context, 6),
+            setMeasuredDimension((textBounds!!.right +
+                    OUTER_HORIZONTAL_EDGE_PADDING +
+                    INNER_HORIZONTAL_PADDING +
+                    OUTER_HORIZONTAL_PADDING).toInt(),
                     heightMeasureSpec)
         } else {
-            //Text size
-            setMeasuredDimension(textBounds!!.right +
-                    //Unknown value
-                    DimensUtils.dpToPx(context, 16) * 2 +
-                    //For inner tab margin
-                    DimensUtils.dpToPx(context, 12),
+            setMeasuredDimension((textBounds!!.right +
+                    INNER_HORIZONTAL_PADDING +
+                    OUTER_HORIZONTAL_PADDING * 2).toInt(),
                     heightMeasureSpec)
         }
     }

@@ -18,9 +18,9 @@
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
-        android:background="@color/color1"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="100dp"
+        android:background="@color/color1" />
 
     <com.ruslankishai.unmaterialtab.tabs.RoundTabLayout
         android:id="@+id/round_tab_view2"
@@ -28,14 +28,15 @@
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
         app:accent="@color/color4"
-        app:withStroke="true"
-        app:cornerRadius="35"/>
+        app:cornerRadius="35"
+        app:withStroke="true" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager2"
-        android:background="@color/color4"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="100dp"
+        android:background="@color/color4" />
+
     <com.ruslankishai.unmaterialtab.tabs.RoundTabLayout
         android:id="@+id/round_tab_view3"
         android:layout_width="match_parent"
@@ -47,9 +48,9 @@
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager3"
-        android:background="@color/color2"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="100dp"
+        android:background="@color/color2" />
 
     <com.ruslankishai.unmaterialtab.tabs.RoundTabLayout
         android:id="@+id/round_tab_view4"
@@ -58,11 +59,11 @@
         android:background="@color/colorWhite"
         app:accent="@color/color3"
         app:cornerRadius="0"
-        app:withStroke="true" />
+      />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager4"
-        android:background="@color/color3"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="100dp"
+        android:background="@color/color3" />
 </LinearLayout>
