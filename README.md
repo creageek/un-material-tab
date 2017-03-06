@@ -1,5 +1,8 @@
 #un-material-tab library
 A customizable alternative of TabLayout from Support Design library which provides almost the same functionality.
+
+<img src="https://github.com/creageek/un-material-tabs/blob/master/resources/sample.png" width="360">
+
 ##How to add?
 I. In your `build.gradle` file add the following dependency:
 ```
@@ -26,7 +29,7 @@ ViewPager.setAdapter(new TabPagerAdapter(getFragmentManager()));
 RoundTabLayout tabLayout = (RoundTabLayout) findViewById(R.id.roundTabLayout);
 tabLayout.setupWithViewPager(viewPager);
 ```
-IV. Override you `getPageTitle` method in your ViewPagerís adapter to return tab title.
+IV. Override you `getPageTitle` method in your ViewPager‚Äôs adapter to return tab title.
 ```java
 @Override
 public CharSequence getPageTitle(int position) {  
@@ -53,7 +56,7 @@ I. In your `layout.xml` file you can set a few attributes to `RoundedTabLayout`:
 II. In your `class.java` you can set some values to customize specific tab:
 * Use `RoundTab#setIcon` method to change icon. You can get `RoundTab` object via `RoundTabLayout#getTab` method which accept tab index as parameter. To enable tab icon, you should also use `RoundTab#setHasIcon`.
 ```java
-Ö
+‚Ä¶
 //after initializing RoundTabLayout and ViewPager
 RoundTab tab = tabLayout.getTab(0);
 Drawable icon = getResources().getDrawable(R.drawable.globe);
@@ -62,38 +65,47 @@ tab.setIcon(icon);
 tab.setHasIcon(true);
 
 //repeat this code for another tabs
-Ö
+‚Ä¶
 ```
 * To disable tab stroke use `RoundTab#setHasStroke` method.
 ```java
-Ö
+‚Ä¶
 //after initializing RoundTabLayout and ViewPager
 RoundTab tab = tabLayout.getTab(0);
 tab.setHasStroke(true);
-Ö
+‚Ä¶
 ```
 * To change corners radius use `RoundTab#setCornerRadius` which accept values from `0` to `50` as a parameter.
 ```java
-Ö
+‚Ä¶
 //after initializing RoundTabLayout and ViewPager
 RoundTab tab = tabLayout.getTab(0);
 tab.setCornerRadius(35);
-Ö
+‚Ä¶
 ```
 * To change tab text use `RoundTab#setText` which accept `String` as a parameter.
 ```java
-Ö
+‚Ä¶
 //after initializing RoundTabLayout and ViewPager
 RoundTab tab = tabLayout.getTab(0);
-tab.setText(ìUsage exampleî);
-Ö
+tab.setText(‚ÄúUsage example‚Äù);
+‚Ä¶
 ```
 ##Where is un-material-tab demo app?
-The `app` works just as an example of usage with different options.
+The `app` works just as an example of usage with different options. Will be uploaded to Play Store sooner.
+
+<img src="https://github.com/creageek/un-material-tabs/blob/master/resources/circle.gif" width="360">
+
+<img src="https://github.com/creageek/un-material-tabs/blob/master/resources/rounded.gif" width="360">
+
+<img src="https://github.com/creageek/un-material-tabs/blob/master/resources/custom_corners.gif" width="360">
+
+<img src="https://github.com/creageek/un-material-tabs/blob/master/resources/custom_tab.gif" width="360"_tab>
 
 ##What about contributions?
-This is my first public repo and first library so Iím trying to keep this code as much clean and well-commented as I can.
-Feel free to contribute and improve something here.
+This is my first public repo and first library so I‚Äôm trying to keep this code as much clean and well-commented as I can.
+Feel free to contribute :)
+
 ##License
 ```
 Copyright (C) 2015 Said Tahsin Dane
