@@ -95,15 +95,15 @@ class RoundTab(context: Context) : View(context) {
      * Initializing tab with data.
      * @param tabText tab title
      */
-    internal fun initTab(tabText: String): RoundTab {
-        this.tabText = tabText
+    fun initTab(tabText: String): RoundTab {
+        this.tabText = tabText.toUpperCase()
 
         textPaint!!.textSize = DimensUtils.spToPx(context, 13).toFloat()
         textPaint!!.style = Paint.Style.STROKE
         textPaint!!.color = tabTextColor
         textPaint!!.isAntiAlias = true
         textPaint!!.isFakeBoldText = true
-        textPaint!!.getTextBounds(tabText, 0, tabText.length, textBounds)
+        textPaint!!.getTextBounds(this.tabText, 0, this.tabText?.length?:0, textBounds)
 
 
         tabStrokePaint!!.style = Paint.Style.STROKE

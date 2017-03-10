@@ -38,8 +38,20 @@ class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeListener {
 
     private var cornerRadius: Int = 50
     private var clickedPosition = 0
+    private var previousPosition = 0
 
     private var hasStroke = true
+
+    private var onTabSelectedListener: OnTabSelectedListener? = null
+    //</editor-fold>
+
+
+    //<editor-fold desc="Listener">
+    interface OnTabSelectedListener {
+        fun onTabSelected(tab: RoundTab, position: Int)
+
+        fun onTabReselected(tab: RoundTab, position: Int)
+    }
     //</editor-fold>
 
     //<editor-fold desc="Layout constructors">
@@ -110,7 +122,7 @@ class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeListener {
         for (i in 0..viewPager.adapter.count - 1) {
             val tabText = viewPager.adapter.getPageTitle(i) as String
             val tab = RoundTab(context, cornerRadius, iconRes, hasStroke)
-                    .initTab(tabText.toUpperCase())
+                    .initTab(tabText)
 
             if (i == viewPager.currentItem) {
                 tab.setTabBackgroundColor(tabStrokeColor)
@@ -132,9 +144,18 @@ class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeListener {
      * Adds tab to child LinearLayout and forming tabs strip.
      * @param tab user tab with custom text and colors.
      */
-    private fun addTab(tab: RoundTab) {
+    fun addTab(tab: RoundTab) {
+        if (tabs.count() == 0) {
+            tab.setTabBackgroundColor(tabStrokeColor)
+            tab.setTabTextColor(tabBackColor)
+        } else {
+            tab.setTabBackgroundColor(tabBackColor)
+            tab.setTabTextColor(tabStrokeColor)
+        }
+        tab.setTabStrokeColor(tabStrokeColor)
         tabs.add(tab)
         tabStrip?.addView(tab, layoutParams)
+        invalidate()
     }
     //</editor-fold>
 
@@ -147,6 +168,12 @@ class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeListener {
             val index = i
 
             tab.setOnClickListener {
+                if (previousPosition != index)
+                    onTabSelectedListener?.onTabSelected(tabs[index], index)
+                else
+                    onTabSelectedListener?.onTabReselected(tabs[index], index)
+                previousPosition = index
+
                 if (index != clickedPosition && clickedPosition != -1) {
                     animateFade(tabs[clickedPosition], ANIMATION_FADE_OUT)
                     tabs[clickedPosition].invalidate()
@@ -174,6 +201,7 @@ class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeListener {
 
     //<editor-fold desc="Layout listeners">
     override fun onPageSelected(position: Int) {
+        previousPosition = position
         scrollTabView(position)
         if (position != clickedPosition && clickedPosition != -1) {
             animateFade(tabs[clickedPosition], ANIMATION_FADE_OUT)
@@ -279,6 +307,10 @@ class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeListener {
     //</editor-fold>
 
     fun getTab(position: Int) = tabs[position]
+
+    fun setOnTabSelectedListener(listener: OnTabSelectedListener) {
+        onTabSelectedListener = listener
+    }
 
     companion object {
         val ANIMATION_FADE_IN = 1
