@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         tabView.getTab(0).icon = resources.getDrawable(R.drawable.ic_public)
         tabView.getTab(0).hasIcon = true
         tabView.getTab(0).hasStroke = true
-        tabView.setOnTabSelectedListener(object:RoundTabLayout.OnTabSelectedListener{
+        tabView.setOnTabSelectedListener(object : RoundTabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: RoundTab, position: Int) {
                 Toast.makeText(applicationContext, "onTabSelected ${tab.tabText} on position $position", Toast.LENGTH_SHORT).show()
             }

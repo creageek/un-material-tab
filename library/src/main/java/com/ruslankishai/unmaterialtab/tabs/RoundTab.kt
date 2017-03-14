@@ -41,8 +41,11 @@ class RoundTab(context: Context) : View(context) {
 
     private var isFirst = false
     private var isLast = false
-
-    private var parentHeight: Int = 0
+    internal var parentHeight: Int = 0
+        set(height) {
+            field = height
+            requestLayout()
+        }
 
     var hasIcon = false
     var hasStroke: Boolean = true
@@ -103,7 +106,7 @@ class RoundTab(context: Context) : View(context) {
         textPaint!!.color = tabTextColor
         textPaint!!.isAntiAlias = true
         textPaint!!.isFakeBoldText = true
-        textPaint!!.getTextBounds(this.tabText, 0, this.tabText?.length?:0, textBounds)
+        textPaint!!.getTextBounds(this.tabText, 0, this.tabText?.length ?: 0, textBounds)
 
 
         tabStrokePaint!!.style = Paint.Style.STROKE
@@ -277,6 +280,7 @@ class RoundTab(context: Context) : View(context) {
      */
     internal fun setTabBackgroundColor(tabBackgroundColor: Int) {
         this.tabBackgroundColor = tabBackgroundColor
+        invalidate()
     }
 
     /**
@@ -286,6 +290,7 @@ class RoundTab(context: Context) : View(context) {
      */
     internal fun setTabStrokeColor(tabStrokeColor: Int) {
         this.tabStrokeColor = tabStrokeColor
+        invalidate()
     }
 
     /**
@@ -295,6 +300,7 @@ class RoundTab(context: Context) : View(context) {
      */
     internal fun setTabTextColor(tabTextColor: Int) {
         this.tabTextColor = tabTextColor
+        invalidate()
     }
 
     /**
@@ -304,14 +310,7 @@ class RoundTab(context: Context) : View(context) {
      */
     internal fun setTabIconTint(tabIconColor: Int) {
         this.tabIconColor = tabIconColor
-    }
-
-    /**
-     * Sets a tab parent view height.
-     * @param parentHeight should take RoundTabLayout height by default.
-     */
-    internal fun setParentHeight(parentHeight: Int) {
-        this.parentHeight = parentHeight
+        invalidate()
     }
 
     /**

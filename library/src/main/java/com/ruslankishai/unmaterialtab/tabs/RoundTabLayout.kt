@@ -48,8 +48,19 @@ class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeListener {
 
     //<editor-fold desc="Listener">
     interface OnTabSelectedListener {
+        /**
+         * Used to get callback when tab was clicked to
+         * set actions programmatically without viewpager.
+         * @param tab can be used to modify tab appearance.
+         * @param position for better content control.
+         */
         fun onTabSelected(tab: RoundTab, position: Int)
 
+        /**
+         * Used to get callback when tab was reselected.
+         * @param tab can be used to modify tab appearance.
+         * @param position for better content control.
+         */
         fun onTabReselected(tab: RoundTab, position: Int)
     }
     //</editor-fold>
@@ -155,7 +166,6 @@ class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeListener {
         tab.setTabStrokeColor(tabStrokeColor)
         tabs.add(tab)
         tabStrip?.addView(tab, layoutParams)
-        invalidate()
     }
     //</editor-fold>
 
@@ -164,7 +174,8 @@ class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeListener {
         super.draw(canvas)
         for (i in tabs.indices) {
             val tab = tabs[i]
-            tab.setParentHeight(height)
+            if (tab.parentHeight == 0)
+                tab.parentHeight = height
             val index = i
 
             tab.setOnClickListener {
@@ -184,17 +195,11 @@ class RoundTabLayout : HorizontalScrollView, ViewPager.OnPageChangeListener {
                 }
             }
 
-            if (i == 0) {
+            if (i == 0)
                 tab.setFirst(true)
-                tab.requestLayout()
-            }
 
-            if (i == tabs.size - 1) {
+            if (i == tabs.size - 1)
                 tab.setLast(true)
-                tab.requestLayout()
-            }
-
-            tab.invalidate()
         }
     }
     //</editor-fold>
