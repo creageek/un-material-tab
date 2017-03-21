@@ -1,9 +1,16 @@
-#un-material-tab library
+# un-material-tab library
 A customizable alternative of TabLayout from Support Design library which provides almost the same functionality.
 
 <img src="https://github.com/creageek/un-material-tabs/blob/master/resources/sample.png" width="360">
 
-##How to add?
+## Currently working on
+   - [x] `RoundTabLayout#onTabSelected` & `RoundTabLayout#onTabReselected` callbacks
+   - [x]  reducing number of GPU view updates
+   - [ ]  new tab animations
+
+If you have any suggestions - feel free to open an issue.
+
+## How to add? 
 I. In your `build.gradle` file add the following dependency:
 ```
 dependencies {
@@ -19,7 +26,7 @@ II. Declare `RoundTabLayout` inside your `layout.xml` file:
             android:background="@color/colorPrimary"
             app:accent="@color/colorAccent" />
 ```
-III. Declare `RoundTabLayout` with `ViewPager` in your Java class:
+III. Declare `RoundTabLayout` with `ViewPager` in your 'class.java':
 ```java
 ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
 
@@ -40,7 +47,7 @@ public CharSequence getPageTitle(int position) {
      }
 }
 ```
-##How to customize?
+## How to customize?
 I. In your `layout.xml` file you can set a few attributes to `RoundedTabLayout`:
 * `android:background` 
     * This attribute works just like usual `background` attribute (reference to a color).
@@ -91,7 +98,7 @@ RoundTab tab = tabLayout.getTab(0);
 tab.setText(“Usage example”);
 …
 ```
-##Where is un-material-tab demo app?
+## Where is un-material-tab demo app?
 The `app` works just as an example of usage with different options. Will be uploaded to Play Store sooner.
 
 <img src="https://github.com/creageek/un-material-tabs/blob/master/resources/circle.gif" width="360">
@@ -100,13 +107,13 @@ The `app` works just as an example of usage with different options. Will be uplo
 
 <img src="https://github.com/creageek/un-material-tabs/blob/master/resources/custom_corners.gif" width="360">
 
-<img src="https://github.com/creageek/un-material-tabs/blob/master/resources/custom_tab.gif" width="360"_tab>
+<img src="https://github.com/creageek/un-material-tabs/blob/master/resources/custom_tab.gif" width="360">
 
-##What about contributions?
+## What about contributions?
 This is my first public repo and first library so I’m trying to keep this code as much clean and well-commented as I can.
 Feel free to contribute :)
 
-##License
+## License
 ```
 Copyright (C) 2017 Ruslan Kishai
 
