@@ -1,4 +1,13 @@
-# un-material-tab library
+# (deprecated) un-material-tab library
+
+I don't have time to maintain this. I basically wrote this small library in a rush, without tests, while working on my own project as a beginner. As a result, there's a lot of things that aren't that great as well as the missing features. Don't really know if I would have some time to finish it completely.
+
+I'd recommend you to use the official TabLayout from Google or another 3rd party library.
+
+If someone wants to pick up where I left off, make a fork of this, notify me and I'll link to your repo here.
+
+<br>
+
 A customizable alternative of TabLayout from Support Design library which provides almost the same functionality.
 
 <img src="https://github.com/creageek/un-material-tabs/blob/master/resources/sample.png" width="360">
@@ -31,7 +40,7 @@ III. Declare `RoundTabLayout` with `ViewPager` in your 'class.java':
 ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
 
 //set adapter to your ViewPager
-ViewPager.setAdapter(new TabPagerAdapter(getFragmentManager()));
+viewPager.setAdapter(new TabPagerAdapter(getFragmentManager()));
 
 RoundTabLayout tabLayout = (RoundTabLayout) findViewById(R.id.roundTabLayout);
 tabLayout.setupWithViewPager(viewPager);
